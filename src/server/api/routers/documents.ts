@@ -34,6 +34,7 @@ export const documentsRouter = createTRPCRouter({
         annotations: JSON.parse(doc.annotations) as unknown[],
         editorState: JSON.parse(doc.editorState) as Record<string, unknown>,
         drawingData: JSON.parse(doc.drawingData) as unknown[],
+        starterQuestions: JSON.parse(doc.starterQuestionsJson || "[]") as string[],
       };
     }),
 

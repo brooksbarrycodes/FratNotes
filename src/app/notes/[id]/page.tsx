@@ -1,46 +1,27 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Navbar } from "~/components/navbar";
-import type {
-  Annotation,
-  Stroke,
-  ToolMode,
-} from "~/components/document-editor";
+import type { Annotation, EmbedPdfRegistry } from "~/components/document-editor";
 import { Chatbot } from "~/components/chatbot";
-import { PdfExportButton } from "~/components/pdf-export-button";
+import { OpenPaperPaperBrief } from "~/components/openpaper-paper-brief";
+import { EmbedPdfFloatingTools } from "~/components/embedpdf-floating-tools";
 import { api } from "~/trpc/react";
-import {
-  IconPalette,
-  IconSparkles,
-  IconEraser,
-  IconArrowLeft,
-  IconPencil,
-  IconHighlight,
-  IconUnderline,
-  IconNote,
-  IconArrowBackUp,
-} from "@tabler/icons-react";
-
-const DRAW_COLORS = [
-  { name: "Sky", value: "#87CEFA" },
-  { name: "Flame", value: "#FF9800" },
-  { name: "Dark", value: "#1A1A2E" },
-];
+import { IconArrowLeft } from "@tabler/icons-react";
 
 const DocumentEditor = dynamic(
   () => import("~/components/document-editor").then((mod) => mod.DocumentEditor),
   {
     ssr: false,
     loading: () => (
-      <div className="rounded-[2rem] border border-sky/15 bg-white/55 p-8 text-center shadow-[0_24px_60px_rgba(26,26,46,0.08)] backdrop-blur-sm">
-        <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-sky border-t-transparent" />
-        <p className="mt-4 font-display text-lg text-dark">
-          Preparing your printed-paper workspace...
-        </p>
+      <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-sky/15 bg-white/55 p-8 shadow-[0_24px_60px_rgba(26,26,46,0.08)] backdrop-blur-sm">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-sky border-t-transparent" />
+          <p className="mt-4 font-display text-lg text-dark">Loading viewer…</p>
+        </div>
       </div>
     ),
   },
@@ -49,19 +30,17 @@ const DocumentEditor = dynamic(
 export default function NotesPage() {
   const params = useParams<{ id: string }>();
 
-  const exportRef = useRef<HTMLDivElement>(null);
-
-  const [activeTool, setActiveTool] = useState<ToolMode>("highlight");
-  const [drawColor, setDrawColor] = useState("#87CEFA");
-  const [showColorPicker, setShowColorPicker] = useState(false);
-  const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analyzeProgress, setAnalyzeProgress] = useState("");
-  const [hasAutoAnalyzed, setHasAutoAnalyzed] = useState(false);
-  const [history, setHistory] = useState<
-    Array<{ annotations: Annotation[]; strokes: Stroke[] }>
-  >([]);
+  const [pendingChatInject, setPendingChatInject] = useState<string | null>(
+    null,
+  );
+  const [embedDocId, setEmbedDocId] = useState<string | null>(null);
+  const [embedRegistry, setEmbedRegistry] = useState<EmbedPdfRegistry | null>(
+    null,
+  );
+
+  const useOpenPaperChat =
+    process.env.NEXT_PUBLIC_OPENPAPER_ENABLED === "true";
 
   const {
     data: doc,
@@ -74,71 +53,17 @@ export default function NotesPage() {
   );
 
   const updateAnnotations = api.documents.updateAnnotations.useMutation();
-  const updateDrawing = api.documents.updateDrawingData.useMutation();
 
   useEffect(() => {
     if (doc?.annotations && Array.isArray(doc.annotations)) {
       setAnnotations(doc.annotations as Annotation[]);
     }
-    if (doc?.drawingData && Array.isArray(doc.drawingData)) {
-      setStrokes(doc.drawingData as typeof strokes);
-    }
   }, [doc]);
 
-  const handleAnalyze = useCallback(async () => {
-    if (!doc?.extractedText) return;
-    setIsAnalyzing(true);
-    setAnalyzeProgress("AI is reading your document...");
-
-    try {
-      const response = await fetch("/api/ai/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: doc.extractedText }),
-      });
-
-      if (!response.ok) throw new Error("Analysis failed");
-
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error("No stream");
-
-      const decoder = new TextDecoder();
-      let fullText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        fullText += decoder.decode(value, { stream: true });
-        setAnalyzeProgress("AI is marking up the page...");
-      }
-
-      const textMatch = fullText.match(/\[[\s\S]*\]/);
-      if (textMatch) {
-        const parsed = JSON.parse(textMatch[0]) as Annotation[];
-        const nextAnnotations = [
-          ...annotations,
-          ...parsed.map((annotation) => ({
-            ...annotation,
-            id:
-              annotation.id ??
-              (globalThis.crypto?.randomUUID?.() ??
-                `${Date.now()}-${Math.random().toString(16).slice(2)}`),
-          })),
-        ];
-
-        setAnnotations(nextAnnotations);
-        updateAnnotations.mutate({
-          id: params.id,
-          annotations: JSON.stringify(nextAnnotations),
-        });
-      }
-    } catch (err) {
-      console.error("Analysis error:", err);
-      setAnalyzeProgress("Analysis failed. Make sure Ollama is running.");
-    } finally {
-      setIsAnalyzing(false);
-    }
-  }, [doc, params.id, annotations, updateAnnotations]);
+  useEffect(() => {
+    setEmbedDocId(null);
+    setEmbedRegistry(null);
+  }, [doc?.id]);
 
   const handleNewAnnotations = useCallback(
     (newAnns: Annotation[]) => {
@@ -161,87 +86,6 @@ export default function NotesPage() {
     },
     [params.id, updateAnnotations],
   );
-
-  const pushHistory = useCallback(() => {
-    setHistory((h) => [...h.slice(-49), { annotations, strokes }]);
-  }, [annotations, strokes]);
-
-  const handleAnnotationsChange = useCallback(
-    (nextAnnotations: Annotation[]) => {
-      pushHistory();
-      setAnnotations(nextAnnotations);
-      updateAnnotations.mutate({
-        id: params.id,
-        annotations: JSON.stringify(nextAnnotations),
-      });
-    },
-    [params.id, updateAnnotations, pushHistory],
-  );
-
-  const handleStrokesChange = useCallback(
-    (newStrokes: typeof strokes) => {
-      pushHistory();
-      setStrokes(newStrokes);
-      updateDrawing.mutate({
-        id: params.id,
-        drawingData: JSON.stringify(newStrokes),
-      });
-    },
-    [params.id, updateDrawing, pushHistory],
-  );
-
-  const handleUndo = useCallback(() => {
-    if (history.length === 0) return;
-    const prev = history[history.length - 1]!;
-    setHistory((h) => h.slice(0, -1));
-    setAnnotations(prev.annotations);
-    setStrokes(prev.strokes);
-    updateAnnotations.mutate({
-      id: params.id,
-      annotations: JSON.stringify(prev.annotations),
-    });
-    updateDrawing.mutate({
-      id: params.id,
-      drawingData: JSON.stringify(prev.strokes),
-    });
-  }, [history, params.id, updateAnnotations, updateDrawing]);
-
-  const handleClearDrawing = () => {
-    pushHistory();
-    setStrokes([]);
-    updateDrawing.mutate({ id: params.id, drawingData: "[]" });
-  };
-
-  useEffect(() => {
-    if (
-      doc?.extractedText &&
-      (!Array.isArray(doc.annotations) || doc.annotations.length === 0) &&
-      annotations.length === 0 &&
-      !isAnalyzing &&
-      !hasAutoAnalyzed
-    ) {
-      setHasAutoAnalyzed(true);
-      void handleAnalyze();
-    }
-  }, [
-    annotations.length,
-    doc?.annotations,
-    doc?.extractedText,
-    handleAnalyze,
-    hasAutoAnalyzed,
-    isAnalyzing,
-  ]);
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "z") {
-        e.preventDefault();
-        handleUndo();
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [handleUndo]);
 
   if (isLoading) {
     return (
@@ -296,137 +140,59 @@ export default function NotesPage() {
     );
   }
 
+  const safeFileName = doc.title.replace(/[/\\?%*:|"<>]/g, "-").slice(0, 120);
+
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="flex h-svh flex-col overflow-hidden bg-cream">
       <Navbar />
 
-      <div className="border-b border-sky/10 bg-white/40 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-3">
-          <h1 className="line-clamp-1 max-w-md font-display text-lg font-semibold text-dark">
+      <div className="shrink-0 border-b border-sky/10 bg-white/40 backdrop-blur-sm">
+        <div className="mx-auto flex max-w-[1600px] items-center px-6 py-2">
+          <h1 className="line-clamp-1 font-display text-base font-semibold text-dark">
             {doc.title}
           </h1>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleAnalyze}
-              disabled={isAnalyzing}
-              className="flex items-center gap-2 rounded-xl bg-sky px-4 py-2 font-display text-sm font-semibold text-white shadow-md transition-all hover:bg-sky-dark active:scale-95 disabled:opacity-50"
-            >
-              {isAnalyzing ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  {analyzeProgress}
-                </>
-              ) : (
-                <>
-                  <IconSparkles className="h-4 w-4" />
-                  AI Analyze
-                </>
-              )}
-            </button>
-            <PdfExportButton targetRef={exportRef} title={doc.title} />
-          </div>
         </div>
       </div>
 
-      {/* Floating toolbar */}
-      <div className="fixed left-4 top-1/2 z-50 flex -translate-y-1/2 flex-col items-center gap-1 rounded-2xl border border-sky/15 bg-white/90 p-1.5 shadow-[0_16px_40px_rgba(26,26,46,0.12)] backdrop-blur-md">
-        {(
-          [
-            { id: "highlight", icon: IconHighlight, label: "Highlight" },
-            { id: "underline", icon: IconUnderline, label: "Underline" },
-            { id: "note", icon: IconNote, label: "Note" },
-            { id: "draw", icon: IconPencil, label: "Draw" },
-            { id: "erase", icon: IconEraser, label: "Erase" },
-          ] as const
-        ).map((tool) => (
-          <button
-            key={tool.id}
-            onClick={() => setActiveTool(tool.id as ToolMode)}
-            className={`group/btn relative rounded-xl p-2.5 transition-all ${
-              activeTool === tool.id
-                ? "bg-sky/15 text-sky"
-                : "text-dark/40 hover:bg-cream hover:text-dark/70"
-            }`}
-            title={tool.label}
-          >
-            <tool.icon className="h-5 w-5" />
-            <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-lg bg-dark/80 px-2 py-1 font-body text-[11px] font-medium text-white opacity-0 transition-opacity group-hover/btn:opacity-100">
-              {tool.label}
-            </span>
-          </button>
-        ))}
+      <EmbedPdfFloatingTools documentId={embedDocId} registry={embedRegistry} />
 
-        <div className="my-1 h-px w-6 bg-sky/15" />
-
-        <button
-          onClick={handleUndo}
-          disabled={history.length === 0}
-          className="group/btn relative rounded-xl p-2.5 text-dark/40 transition-all hover:bg-cream hover:text-dark/70 disabled:opacity-30"
-          title="Undo (Ctrl+Z)"
-        >
-          <IconArrowBackUp className="h-5 w-5" />
-          <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-lg bg-dark/80 px-2 py-1 font-body text-[11px] font-medium text-white opacity-0 transition-opacity group-hover/btn:opacity-100">
-            Undo
-          </span>
-        </button>
-
-        <div className="my-1 h-px w-6 bg-sky/15" />
-
-        <div className="relative">
-          <button
-            onClick={() => setShowColorPicker(!showColorPicker)}
-            className="group/btn relative rounded-xl p-2.5 text-dark/40 transition-all hover:bg-cream hover:text-dark/70"
-            title="Color"
-          >
-            <IconPalette className="h-5 w-5" style={{ color: drawColor }} />
-            <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-lg bg-dark/80 px-2 py-1 font-body text-[11px] font-medium text-white opacity-0 transition-opacity group-hover/btn:opacity-100">
-              Color
-            </span>
-          </button>
-
-          {showColorPicker && (
-            <div className="absolute left-full top-0 z-50 ml-2 flex flex-col gap-2 rounded-2xl bg-white p-2 shadow-lg">
-              {DRAW_COLORS.map((c) => (
-                <button
-                  key={c.value}
-                  onClick={() => {
-                    setDrawColor(c.value);
-                    setShowColorPicker(false);
-                  }}
-                  className={`h-7 w-7 rounded-full ring-offset-1 transition-all hover:scale-110 ${
-                    drawColor === c.value ? "ring-2" : "ring-1 ring-dark/10"
-                  }`}
-                  style={{
-                    backgroundColor: c.value,
-                    ["--tw-ring-color" as string]:
-                      drawColor === c.value ? c.value : undefined,
-                  }}
-                  title={c.name}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="mx-auto flex max-w-[1600px] gap-4 py-6 pl-16 pr-6">
-        <div className="relative min-w-0 flex-1" ref={exportRef}>
+      <div className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 gap-3 px-4 pb-0 pt-2 pl-14 pr-4">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2">
+          <OpenPaperPaperBrief
+            brief={doc.paperBrief ?? ""}
+            syncLabel={
+              doc.openPaperPaperId ? "Open Paper sync" : undefined
+            }
+          />
           <DocumentEditor
             pdfBase64={doc.originalPdf}
-            annotations={annotations}
-            strokes={strokes}
-            activeTool={activeTool}
-            activeColor={drawColor}
-            onAnnotationsChange={handleAnnotationsChange}
-            onStrokesChange={handleStrokesChange}
+            exportFileName={`${safeFileName || "document"}.pdf`}
+            onEmbedReady={({ documentId, registry }) => {
+              setEmbedDocId(documentId);
+              setEmbedRegistry(registry);
+            }}
+            onQuickExplain={(text) => {
+              setPendingChatInject(`Explain this: "${text}"`);
+            }}
           />
         </div>
 
-        <div className="h-[calc(100vh-140px)] w-[380px] shrink-0 sticky top-[140px]">
+        <div className="flex h-full min-h-0 w-[min(100%,360px)] shrink-0 flex-col justify-end border-l border-sky/10 pl-3 pb-6 pt-1">
+          <div className="flex h-[50%] min-h-[200px] max-h-[min(50%,26rem)] w-full min-w-0 flex-col overflow-hidden">
           <Chatbot
             documentText={doc.extractedText}
             onNewAnnotations={handleNewAnnotations}
+            documentId={doc.id}
+            useOpenPaper={useOpenPaperChat}
+            starterQuestions={
+              Array.isArray(doc.starterQuestions)
+                ? (doc.starterQuestions as string[])
+                : []
+            }
+            pendingInject={pendingChatInject}
+            onPendingInjectConsumed={() => setPendingChatInject(null)}
           />
+          </div>
         </div>
       </div>
     </div>

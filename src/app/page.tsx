@@ -104,37 +104,6 @@ export default function HomePage() {
             </div>
           )}
         </div>
-
-        <div className="mt-24 grid gap-8 md:grid-cols-3">
-          {[
-            {
-              icon: "📄",
-              title: "Drop a PDF",
-              desc: "Upload any lecture notes, textbook chapter, or study guide",
-            },
-            {
-              icon: "🤖",
-              title: "AI Takes Notes",
-              desc: "Watch as highlights, underlines, and margin notes appear in real time",
-            },
-            {
-              icon: "✏️",
-              title: "Make It Yours",
-              desc: "Edit, draw, chat with AI, and download your annotated PDF",
-            },
-          ].map((feat) => (
-            <div
-              key={feat.title}
-              className="rounded-2xl border border-sky/10 bg-white/50 p-6 backdrop-blur-sm transition-all hover:border-sky/30 hover:shadow-lg"
-            >
-              <div className="mb-3 text-3xl">{feat.icon}</div>
-              <h3 className="mb-2 font-display text-lg font-semibold text-dark">
-                {feat.title}
-              </h3>
-              <p className="font-body text-sm text-dark/50">{feat.desc}</p>
-            </div>
-          ))}
-        </div>
       </main>
     </div>
   );

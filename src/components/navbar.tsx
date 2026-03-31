@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { OpenPaperSearchDialog } from "~/components/openpaper-search-dialog";
 import { Highlighter } from "~/components/ui/highlighter";
 import { cn } from "~/lib/utils";
 
@@ -19,7 +20,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <Link
             href="/dashboard"
             className={cn(
@@ -28,6 +29,25 @@ export function Navbar() {
             )}
           >
             My Notes
+          </Link>
+          <Link
+            href="/ask"
+            className={cn(
+              "font-body text-sm font-medium transition-colors hover:text-flame",
+              pathname === "/ask" ? "text-flame" : "text-dark/60",
+            )}
+          >
+            Ask library
+          </Link>
+          <OpenPaperSearchDialog />
+          <Link
+            href="/settings/openpaper"
+            className={cn(
+              "font-body text-sm font-medium transition-colors hover:text-flame",
+              pathname?.startsWith("/settings") ? "text-flame" : "text-dark/60",
+            )}
+          >
+            Open Paper
           </Link>
           <span className="rounded-xl bg-flame px-4 py-2 font-display text-sm font-semibold text-white shadow-md shadow-flame/20">
             Guest Mode

@@ -3530,6 +3530,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    openPaperSessionToken: string | null
+    openPaperKbConversationId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -3538,6 +3540,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    openPaperSessionToken: string | null
+    openPaperKbConversationId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -3546,6 +3550,8 @@ export namespace Prisma {
     email: number
     emailVerified: number
     image: number
+    openPaperSessionToken: number
+    openPaperKbConversationId: number
     _all: number
   }
 
@@ -3556,6 +3562,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    openPaperSessionToken?: true
+    openPaperKbConversationId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -3564,6 +3572,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    openPaperSessionToken?: true
+    openPaperKbConversationId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -3572,6 +3582,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    openPaperSessionToken?: true
+    openPaperKbConversationId?: true
     _all?: true
   }
 
@@ -3653,6 +3665,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    openPaperSessionToken: string | null
+    openPaperKbConversationId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -3678,6 +3692,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    openPaperSessionToken?: boolean
+    openPaperKbConversationId?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     documents?: boolean | User$documentsArgs<ExtArgs>
@@ -3690,6 +3706,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    openPaperSessionToken?: boolean
+    openPaperKbConversationId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3698,6 +3716,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    openPaperSessionToken?: boolean
+    openPaperKbConversationId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -3706,9 +3726,11 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    openPaperSessionToken?: boolean
+    openPaperKbConversationId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "openPaperSessionToken" | "openPaperKbConversationId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -3731,6 +3753,14 @@ export namespace Prisma {
       email: string | null
       emailVerified: Date | null
       image: string | null
+      /**
+       * Session token for Open Paper API (Bearer); optional per-user bridge
+       */
+      openPaperSessionToken: string | null
+      /**
+       * Cached "Ask everything" / knowledge-base conversation id
+       */
+      openPaperKbConversationId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -4162,6 +4192,8 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
+    readonly openPaperSessionToken: FieldRef<"User", 'String'>
+    readonly openPaperKbConversationId: FieldRef<"User", 'String'>
   }
     
 
@@ -5623,6 +5655,11 @@ export namespace Prisma {
     annotations: string | null
     editorState: string | null
     drawingData: string | null
+    openPaperPaperId: string | null
+    openPaperUploadJobId: string | null
+    openPaperConversationId: string | null
+    paperBrief: string | null
+    starterQuestionsJson: string | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5636,6 +5673,11 @@ export namespace Prisma {
     annotations: string | null
     editorState: string | null
     drawingData: string | null
+    openPaperPaperId: string | null
+    openPaperUploadJobId: string | null
+    openPaperConversationId: string | null
+    paperBrief: string | null
+    starterQuestionsJson: string | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5649,6 +5691,11 @@ export namespace Prisma {
     annotations: number
     editorState: number
     drawingData: number
+    openPaperPaperId: number
+    openPaperUploadJobId: number
+    openPaperConversationId: number
+    paperBrief: number
+    starterQuestionsJson: number
     userId: number
     createdAt: number
     updatedAt: number
@@ -5664,6 +5711,11 @@ export namespace Prisma {
     annotations?: true
     editorState?: true
     drawingData?: true
+    openPaperPaperId?: true
+    openPaperUploadJobId?: true
+    openPaperConversationId?: true
+    paperBrief?: true
+    starterQuestionsJson?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -5677,6 +5729,11 @@ export namespace Prisma {
     annotations?: true
     editorState?: true
     drawingData?: true
+    openPaperPaperId?: true
+    openPaperUploadJobId?: true
+    openPaperConversationId?: true
+    paperBrief?: true
+    starterQuestionsJson?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -5690,6 +5747,11 @@ export namespace Prisma {
     annotations?: true
     editorState?: true
     drawingData?: true
+    openPaperPaperId?: true
+    openPaperUploadJobId?: true
+    openPaperConversationId?: true
+    paperBrief?: true
+    starterQuestionsJson?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -5776,6 +5838,11 @@ export namespace Prisma {
     annotations: string
     editorState: string
     drawingData: string
+    openPaperPaperId: string | null
+    openPaperUploadJobId: string | null
+    openPaperConversationId: string | null
+    paperBrief: string
+    starterQuestionsJson: string
     userId: string
     createdAt: Date
     updatedAt: Date
@@ -5806,6 +5873,11 @@ export namespace Prisma {
     annotations?: boolean
     editorState?: boolean
     drawingData?: boolean
+    openPaperPaperId?: boolean
+    openPaperUploadJobId?: boolean
+    openPaperConversationId?: boolean
+    paperBrief?: boolean
+    starterQuestionsJson?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5820,6 +5892,11 @@ export namespace Prisma {
     annotations?: boolean
     editorState?: boolean
     drawingData?: boolean
+    openPaperPaperId?: boolean
+    openPaperUploadJobId?: boolean
+    openPaperConversationId?: boolean
+    paperBrief?: boolean
+    starterQuestionsJson?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5834,6 +5911,11 @@ export namespace Prisma {
     annotations?: boolean
     editorState?: boolean
     drawingData?: boolean
+    openPaperPaperId?: boolean
+    openPaperUploadJobId?: boolean
+    openPaperConversationId?: boolean
+    paperBrief?: boolean
+    starterQuestionsJson?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5848,12 +5930,17 @@ export namespace Prisma {
     annotations?: boolean
     editorState?: boolean
     drawingData?: boolean
+    openPaperPaperId?: boolean
+    openPaperUploadJobId?: boolean
+    openPaperConversationId?: boolean
+    paperBrief?: boolean
+    starterQuestionsJson?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "originalPdf" | "extractedText" | "annotations" | "editorState" | "drawingData" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
+  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "originalPdf" | "extractedText" | "annotations" | "editorState" | "drawingData" | "openPaperPaperId" | "openPaperUploadJobId" | "openPaperConversationId" | "paperBrief" | "starterQuestionsJson" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
   export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -5877,6 +5964,14 @@ export namespace Prisma {
       annotations: string
       editorState: string
       drawingData: string
+      /**
+       * Open Paper paper UUID after sync (optional)
+       */
+      openPaperPaperId: string | null
+      openPaperUploadJobId: string | null
+      openPaperConversationId: string | null
+      paperBrief: string
+      starterQuestionsJson: string
       userId: string
       createdAt: Date
       updatedAt: Date
@@ -6311,6 +6406,11 @@ export namespace Prisma {
     readonly annotations: FieldRef<"Document", 'String'>
     readonly editorState: FieldRef<"Document", 'String'>
     readonly drawingData: FieldRef<"Document", 'String'>
+    readonly openPaperPaperId: FieldRef<"Document", 'String'>
+    readonly openPaperUploadJobId: FieldRef<"Document", 'String'>
+    readonly openPaperConversationId: FieldRef<"Document", 'String'>
+    readonly paperBrief: FieldRef<"Document", 'String'>
+    readonly starterQuestionsJson: FieldRef<"Document", 'String'>
     readonly userId: FieldRef<"Document", 'String'>
     readonly createdAt: FieldRef<"Document", 'DateTime'>
     readonly updatedAt: FieldRef<"Document", 'DateTime'>
@@ -6771,7 +6871,9 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     emailVerified: 'emailVerified',
-    image: 'image'
+    image: 'image',
+    openPaperSessionToken: 'openPaperSessionToken',
+    openPaperKbConversationId: 'openPaperKbConversationId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -6794,6 +6896,11 @@ export namespace Prisma {
     annotations: 'annotations',
     editorState: 'editorState',
     drawingData: 'drawingData',
+    openPaperPaperId: 'openPaperPaperId',
+    openPaperUploadJobId: 'openPaperUploadJobId',
+    openPaperConversationId: 'openPaperConversationId',
+    paperBrief: 'paperBrief',
+    starterQuestionsJson: 'starterQuestionsJson',
     userId: 'userId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -7018,6 +7125,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    openPaperSessionToken?: StringNullableFilter<"User"> | string | null
+    openPaperKbConversationId?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     documents?: DocumentListRelationFilter
@@ -7029,6 +7138,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    openPaperSessionToken?: SortOrderInput | SortOrder
+    openPaperKbConversationId?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     documents?: DocumentOrderByRelationAggregateInput
@@ -7043,6 +7154,8 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    openPaperSessionToken?: StringNullableFilter<"User"> | string | null
+    openPaperKbConversationId?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     documents?: DocumentListRelationFilter
@@ -7054,6 +7167,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    openPaperSessionToken?: SortOrderInput | SortOrder
+    openPaperKbConversationId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -7068,6 +7183,8 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    openPaperSessionToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    openPaperKbConversationId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type VerificationTokenWhereInput = {
@@ -7124,6 +7241,11 @@ export namespace Prisma {
     annotations?: StringFilter<"Document"> | string
     editorState?: StringFilter<"Document"> | string
     drawingData?: StringFilter<"Document"> | string
+    openPaperPaperId?: StringNullableFilter<"Document"> | string | null
+    openPaperUploadJobId?: StringNullableFilter<"Document"> | string | null
+    openPaperConversationId?: StringNullableFilter<"Document"> | string | null
+    paperBrief?: StringFilter<"Document"> | string
+    starterQuestionsJson?: StringFilter<"Document"> | string
     userId?: StringFilter<"Document"> | string
     createdAt?: DateTimeFilter<"Document"> | Date | string
     updatedAt?: DateTimeFilter<"Document"> | Date | string
@@ -7138,6 +7260,11 @@ export namespace Prisma {
     annotations?: SortOrder
     editorState?: SortOrder
     drawingData?: SortOrder
+    openPaperPaperId?: SortOrderInput | SortOrder
+    openPaperUploadJobId?: SortOrderInput | SortOrder
+    openPaperConversationId?: SortOrderInput | SortOrder
+    paperBrief?: SortOrder
+    starterQuestionsJson?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7155,6 +7282,11 @@ export namespace Prisma {
     annotations?: StringFilter<"Document"> | string
     editorState?: StringFilter<"Document"> | string
     drawingData?: StringFilter<"Document"> | string
+    openPaperPaperId?: StringNullableFilter<"Document"> | string | null
+    openPaperUploadJobId?: StringNullableFilter<"Document"> | string | null
+    openPaperConversationId?: StringNullableFilter<"Document"> | string | null
+    paperBrief?: StringFilter<"Document"> | string
+    starterQuestionsJson?: StringFilter<"Document"> | string
     userId?: StringFilter<"Document"> | string
     createdAt?: DateTimeFilter<"Document"> | Date | string
     updatedAt?: DateTimeFilter<"Document"> | Date | string
@@ -7169,6 +7301,11 @@ export namespace Prisma {
     annotations?: SortOrder
     editorState?: SortOrder
     drawingData?: SortOrder
+    openPaperPaperId?: SortOrderInput | SortOrder
+    openPaperUploadJobId?: SortOrderInput | SortOrder
+    openPaperConversationId?: SortOrderInput | SortOrder
+    paperBrief?: SortOrder
+    starterQuestionsJson?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7188,6 +7325,11 @@ export namespace Prisma {
     annotations?: StringWithAggregatesFilter<"Document"> | string
     editorState?: StringWithAggregatesFilter<"Document"> | string
     drawingData?: StringWithAggregatesFilter<"Document"> | string
+    openPaperPaperId?: StringNullableWithAggregatesFilter<"Document"> | string | null
+    openPaperUploadJobId?: StringNullableWithAggregatesFilter<"Document"> | string | null
+    openPaperConversationId?: StringNullableWithAggregatesFilter<"Document"> | string | null
+    paperBrief?: StringWithAggregatesFilter<"Document"> | string
+    starterQuestionsJson?: StringWithAggregatesFilter<"Document"> | string
     userId?: StringWithAggregatesFilter<"Document"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
@@ -7358,6 +7500,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     documents?: DocumentCreateNestedManyWithoutUserInput
@@ -7369,6 +7513,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
@@ -7380,6 +7526,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     documents?: DocumentUpdateManyWithoutUserNestedInput
@@ -7391,6 +7539,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
@@ -7402,6 +7552,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -7410,6 +7562,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -7418,6 +7572,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type VerificationTokenCreateInput = {
@@ -7470,6 +7626,11 @@ export namespace Prisma {
     annotations?: string
     editorState?: string
     drawingData?: string
+    openPaperPaperId?: string | null
+    openPaperUploadJobId?: string | null
+    openPaperConversationId?: string | null
+    paperBrief?: string
+    starterQuestionsJson?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutDocumentsInput
@@ -7483,6 +7644,11 @@ export namespace Prisma {
     annotations?: string
     editorState?: string
     drawingData?: string
+    openPaperPaperId?: string | null
+    openPaperUploadJobId?: string | null
+    openPaperConversationId?: string | null
+    paperBrief?: string
+    starterQuestionsJson?: string
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7496,6 +7662,11 @@ export namespace Prisma {
     annotations?: StringFieldUpdateOperationsInput | string
     editorState?: StringFieldUpdateOperationsInput | string
     drawingData?: StringFieldUpdateOperationsInput | string
+    openPaperPaperId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperUploadJobId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperConversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    paperBrief?: StringFieldUpdateOperationsInput | string
+    starterQuestionsJson?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
@@ -7509,6 +7680,11 @@ export namespace Prisma {
     annotations?: StringFieldUpdateOperationsInput | string
     editorState?: StringFieldUpdateOperationsInput | string
     drawingData?: StringFieldUpdateOperationsInput | string
+    openPaperPaperId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperUploadJobId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperConversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    paperBrief?: StringFieldUpdateOperationsInput | string
+    starterQuestionsJson?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7522,6 +7698,11 @@ export namespace Prisma {
     annotations?: string
     editorState?: string
     drawingData?: string
+    openPaperPaperId?: string | null
+    openPaperUploadJobId?: string | null
+    openPaperConversationId?: string | null
+    paperBrief?: string
+    starterQuestionsJson?: string
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7535,6 +7716,11 @@ export namespace Prisma {
     annotations?: StringFieldUpdateOperationsInput | string
     editorState?: StringFieldUpdateOperationsInput | string
     drawingData?: StringFieldUpdateOperationsInput | string
+    openPaperPaperId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperUploadJobId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperConversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    paperBrief?: StringFieldUpdateOperationsInput | string
+    starterQuestionsJson?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7547,6 +7733,11 @@ export namespace Prisma {
     annotations?: StringFieldUpdateOperationsInput | string
     editorState?: StringFieldUpdateOperationsInput | string
     drawingData?: StringFieldUpdateOperationsInput | string
+    openPaperPaperId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperUploadJobId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperConversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    paperBrief?: StringFieldUpdateOperationsInput | string
+    starterQuestionsJson?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7807,6 +7998,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    openPaperSessionToken?: SortOrder
+    openPaperKbConversationId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -7815,6 +8008,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    openPaperSessionToken?: SortOrder
+    openPaperKbConversationId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -7823,6 +8018,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    openPaperSessionToken?: SortOrder
+    openPaperKbConversationId?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7877,6 +8074,11 @@ export namespace Prisma {
     annotations?: SortOrder
     editorState?: SortOrder
     drawingData?: SortOrder
+    openPaperPaperId?: SortOrder
+    openPaperUploadJobId?: SortOrder
+    openPaperConversationId?: SortOrder
+    paperBrief?: SortOrder
+    starterQuestionsJson?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7890,6 +8092,11 @@ export namespace Prisma {
     annotations?: SortOrder
     editorState?: SortOrder
     drawingData?: SortOrder
+    openPaperPaperId?: SortOrder
+    openPaperUploadJobId?: SortOrder
+    openPaperConversationId?: SortOrder
+    paperBrief?: SortOrder
+    starterQuestionsJson?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7903,6 +8110,11 @@ export namespace Prisma {
     annotations?: SortOrder
     editorState?: SortOrder
     drawingData?: SortOrder
+    openPaperPaperId?: SortOrder
+    openPaperUploadJobId?: SortOrder
+    openPaperConversationId?: SortOrder
+    paperBrief?: SortOrder
+    starterQuestionsJson?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8298,6 +8510,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     documents?: DocumentCreateNestedManyWithoutUserInput
   }
@@ -8308,6 +8522,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
   }
@@ -8334,6 +8550,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     documents?: DocumentUpdateManyWithoutUserNestedInput
   }
@@ -8344,6 +8562,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -8354,6 +8574,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     documents?: DocumentCreateNestedManyWithoutUserInput
   }
@@ -8364,6 +8586,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     documents?: DocumentUncheckedCreateNestedManyWithoutUserInput
   }
@@ -8390,6 +8614,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     documents?: DocumentUpdateManyWithoutUserNestedInput
   }
@@ -8400,6 +8626,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -8472,6 +8700,11 @@ export namespace Prisma {
     annotations?: string
     editorState?: string
     drawingData?: string
+    openPaperPaperId?: string | null
+    openPaperUploadJobId?: string | null
+    openPaperConversationId?: string | null
+    paperBrief?: string
+    starterQuestionsJson?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8484,6 +8717,11 @@ export namespace Prisma {
     annotations?: string
     editorState?: string
     drawingData?: string
+    openPaperPaperId?: string | null
+    openPaperUploadJobId?: string | null
+    openPaperConversationId?: string | null
+    paperBrief?: string
+    starterQuestionsJson?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8585,6 +8823,11 @@ export namespace Prisma {
     annotations?: StringFilter<"Document"> | string
     editorState?: StringFilter<"Document"> | string
     drawingData?: StringFilter<"Document"> | string
+    openPaperPaperId?: StringNullableFilter<"Document"> | string | null
+    openPaperUploadJobId?: StringNullableFilter<"Document"> | string | null
+    openPaperConversationId?: StringNullableFilter<"Document"> | string | null
+    paperBrief?: StringFilter<"Document"> | string
+    starterQuestionsJson?: StringFilter<"Document"> | string
     userId?: StringFilter<"Document"> | string
     createdAt?: DateTimeFilter<"Document"> | Date | string
     updatedAt?: DateTimeFilter<"Document"> | Date | string
@@ -8596,6 +8839,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -8606,6 +8851,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    openPaperSessionToken?: string | null
+    openPaperKbConversationId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -8632,6 +8879,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -8642,6 +8891,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperKbConversationId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -8675,6 +8926,11 @@ export namespace Prisma {
     annotations?: string
     editorState?: string
     drawingData?: string
+    openPaperPaperId?: string | null
+    openPaperUploadJobId?: string | null
+    openPaperConversationId?: string | null
+    paperBrief?: string
+    starterQuestionsJson?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8750,6 +9006,11 @@ export namespace Prisma {
     annotations?: StringFieldUpdateOperationsInput | string
     editorState?: StringFieldUpdateOperationsInput | string
     drawingData?: StringFieldUpdateOperationsInput | string
+    openPaperPaperId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperUploadJobId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperConversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    paperBrief?: StringFieldUpdateOperationsInput | string
+    starterQuestionsJson?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8762,6 +9023,11 @@ export namespace Prisma {
     annotations?: StringFieldUpdateOperationsInput | string
     editorState?: StringFieldUpdateOperationsInput | string
     drawingData?: StringFieldUpdateOperationsInput | string
+    openPaperPaperId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperUploadJobId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperConversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    paperBrief?: StringFieldUpdateOperationsInput | string
+    starterQuestionsJson?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8774,6 +9040,11 @@ export namespace Prisma {
     annotations?: StringFieldUpdateOperationsInput | string
     editorState?: StringFieldUpdateOperationsInput | string
     drawingData?: StringFieldUpdateOperationsInput | string
+    openPaperPaperId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperUploadJobId?: NullableStringFieldUpdateOperationsInput | string | null
+    openPaperConversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    paperBrief?: StringFieldUpdateOperationsInput | string
+    starterQuestionsJson?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

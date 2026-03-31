@@ -4,6 +4,8 @@ import { parsePdfFromArrayBuffer } from "~/lib/pdf-parser";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { getEffectiveUserId } from "~/server/lib/effective-user";
+import { isOpenPaperServerEnabled } from "~/server/openpaper/config";
+import { startOpenPaperDocumentSync } from "~/server/openpaper/sync-document";
 
 export const runtime = "nodejs";
 
@@ -61,10 +63,12 @@ export async function POST(req: Request) {
     const session = await auth();
     const userId = await getEffectiveUserId(session);
 
+    const pdfBuffer = Buffer.from(arrayBuffer);
+
     const document = await db.document.create({
       data: {
         title: parsed.title || file.name.replace(/\.pdf$/i, ""),
-        originalPdf: Buffer.from(arrayBuffer),
+        originalPdf: pdfBuffer,
         extractedText: parsed.text,
         userId,
       },
@@ -73,6 +77,15 @@ export async function POST(req: Request) {
         title: true,
       },
     });
+
+    if (isOpenPaperServerEnabled()) {
+      void startOpenPaperDocumentSync({
+        documentId: document.id,
+        userId,
+        pdfBuffer,
+        filename: file.name || "document.pdf",
+      });
+    }
 
     return NextResponse.json({
       id: document.id,

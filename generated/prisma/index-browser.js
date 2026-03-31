@@ -146,7 +146,9 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   emailVerified: 'emailVerified',
-  image: 'image'
+  image: 'image',
+  openPaperSessionToken: 'openPaperSessionToken',
+  openPaperKbConversationId: 'openPaperKbConversationId'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
@@ -163,6 +165,11 @@ exports.Prisma.DocumentScalarFieldEnum = {
   annotations: 'annotations',
   editorState: 'editorState',
   drawingData: 'drawingData',
+  openPaperPaperId: 'openPaperPaperId',
+  openPaperUploadJobId: 'openPaperUploadJobId',
+  openPaperConversationId: 'openPaperConversationId',
+  paperBrief: 'paperBrief',
+  starterQuestionsJson: 'starterQuestionsJson',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

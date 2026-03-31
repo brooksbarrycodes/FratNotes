@@ -21,7 +21,10 @@ Example output:
   {"type": "margin-note", "targetText": "ATP synthesis occurs through oxidative phosphorylation", "color": "#FF9800", "note": "This is THE key process - everything in cellular respiration leads here. Think of it as the cell's power plant assembly line."}
 ]`;
 
-export const CHAT_SYSTEM_PROMPT = (documentText: string) =>
+export const CHAT_SYSTEM_PROMPT = (
+  documentText: string,
+  voiceInstruction: string,
+) =>
   `You are FratNotes AI, a friendly and knowledgeable college study assistant. You're chatting with a student about their study material.
 
 Here is the document content they're studying:
@@ -29,10 +32,12 @@ Here is the document content they're studying:
 ${documentText}
 ---
 
+Style and language (follow strictly):
+${voiceInstruction}
+
 Rules:
 1. Answer questions about the material clearly and helpfully
 2. When asked to explain something, use analogies and examples a college student would relate to
-3. Keep your tone casual but accurate - like a smart upperclassman tutoring
-4. If asked to revise notes or add annotations, return a JSON object with key "annotations" containing an array in the same format as the analysis annotations
-5. For regular chat responses, just respond naturally in markdown
-6. If the student seems confused, break things down step by step`;
+3. If asked to revise notes or add annotations, return a JSON object with key "annotations" containing an array in the same format as the analysis annotations
+4. For regular chat responses, respond naturally in markdown (respecting the style/language above)
+5. If the student seems confused, break things down step by step`;

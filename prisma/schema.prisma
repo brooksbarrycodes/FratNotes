@@ -41,6 +41,10 @@ model User {
     email         String?    @unique
     emailVerified DateTime?
     image         String?
+    /// Session token for Open Paper API (Bearer); optional per-user bridge
+    openPaperSessionToken String?
+    /// Cached "Ask everything" / knowledge-base conversation id
+    openPaperKbConversationId String?
     accounts      Account[]
     sessions      Session[]
     documents     Document[]
@@ -62,10 +66,17 @@ model Document {
     annotations   String   @default("[]")
     editorState   String   @default("{}")
     drawingData   String   @default("[]")
+    /// Open Paper paper UUID after sync (optional)
+    openPaperPaperId         String?
+    openPaperUploadJobId     String?
+    openPaperConversationId  String?
+    paperBrief               String   @default("")
+    starterQuestionsJson     String   @default("[]")
     userId        String
     user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
     @@index([userId])
+    @@index([openPaperPaperId])
 }

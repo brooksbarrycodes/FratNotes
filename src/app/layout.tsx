@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { Fredoka, DM_Sans, Caveat } from "next/font/google";
 
+import { PostHogProvider } from "~/components/posthog-provider";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
@@ -38,8 +39,19 @@ export default function RootLayout({
       lang="en"
       className={`${fredoka.variable} ${dmSans.variable} ${caveat.variable}`}
     >
-      <body className="min-h-screen bg-cream font-body text-dark antialiased">
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+      <body
+        className="min-h-screen bg-cream font-body text-dark antialiased"
+        style={{
+          margin: 0,
+          minHeight: "100vh",
+          backgroundColor: "#F7FFDD",
+          color: "#1A1A2E",
+          fontFamily: "ui-sans-serif, system-ui, sans-serif",
+        }}
+      >
+        <PostHogProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
