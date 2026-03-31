@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fredoka", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Caveat", cursive;
+
+  --color-cream: #F7FFDD;
+  --color-cream-dark: #E8F0C8;
+  --color-sky: #87CEFA;
+  --color-sky-dark: #5BA8D9;
+  --color-flame: #FF9800;
+  --color-flame-dark: #E68A00;
+  --color-dark: #1A1A2E;
+  --color-muted: #6B7280;
+  --color-paper: #FEFFF5;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    color: var(--color-dark);
+  }
+
+  body {
+    background-color: var(--color-cream);
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: rgba(135, 206, 250, 0.35);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.bn-container .bn-editor {
+  font-family: var(--font-body);
+  color: var(--color-dark);
+  background: transparent;
+}
+
+.bn-container .bn-block-group {
+  padding-left: 0;
+}
+
+.bn-container [data-content-type="heading"] {
+  font-family: var(--font-display);
+}
+
+.bn-container .bn-toolbar {
+  border-radius: 12px;
+  border-color: rgba(135, 206, 250, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+}
