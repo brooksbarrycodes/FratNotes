@@ -10,6 +10,12 @@ import {
 import { createPortal } from "react-dom";
 import { PDFViewer, type PDFViewerRef } from "@embedpdf/react-pdf-viewer";
 
+export type {
+  Annotation,
+  AnnotationsPayload,
+  CategoryDef,
+} from "~/lib/annotations-schema";
+
 export type ToolMode = "highlight" | "underline" | "note" | "draw" | "erase";
 
 export type EmbedPdfRegistry = {
@@ -36,23 +42,6 @@ interface ScaledRect {
   width: number;
   height: number;
   pageNumber?: number;
-}
-
-export interface Annotation {
-  id?: string;
-  type: "highlight" | "underline" | "margin-note";
-  color: string;
-  targetText?: string;
-  note?: string;
-  pageIndex?: number;
-  rects?: AnnotationRect[];
-  notePosition?: OverlayPoint;
-  scaledPosition?: {
-    boundingRect: ScaledRect;
-    rects: ScaledRect[];
-    usePdfCoordinates?: boolean;
-  };
-  content?: { text?: string; image?: string };
 }
 
 export interface StrokePoint {

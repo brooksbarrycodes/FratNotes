@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { normalizeDbAnnotations } from "~/lib/annotations-schema";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { getEffectiveUserId } from "~/server/lib/effective-user";
 
@@ -31,7 +32,7 @@ export const documentsRouter = createTRPCRouter({
       return {
         ...doc,
         originalPdf: Buffer.from(doc.originalPdf).toString("base64"),
-        annotations: JSON.parse(doc.annotations) as unknown[],
+        annotations: normalizeDbAnnotations(JSON.parse(doc.annotations || "[]")),
         editorState: JSON.parse(doc.editorState) as Record<string, unknown>,
         drawingData: JSON.parse(doc.drawingData) as unknown[],
         starterQuestions: JSON.parse(doc.starterQuestionsJson || "[]") as string[],

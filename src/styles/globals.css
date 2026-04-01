@@ -54,6 +54,33 @@
     background: transparent;
   }
 
+  /* Study chat panel: soft mesh + depth without leaving the cream/sky brand world */
+  .chat-panel-surface {
+    background:
+      radial-gradient(
+        120% 80% at 100% 0%,
+        rgba(135, 206, 250, 0.14),
+        transparent 55%
+      ),
+      radial-gradient(
+        90% 70% at 0% 100%,
+        rgba(255, 152, 0, 0.06),
+        transparent 50%
+      ),
+      linear-gradient(
+        165deg,
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(254, 255, 245, 0.94) 45%,
+        rgba(247, 255, 221, 0.35) 100%
+      );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chat-typing-dot {
+      animation: none !important;
+    }
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.4s ease-out forwards;
   }

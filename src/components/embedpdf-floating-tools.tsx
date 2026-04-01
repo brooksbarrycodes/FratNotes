@@ -43,6 +43,13 @@ const DRAW_COLORS = [
   { name: "Sky", value: "#87CEFA" },
   { name: "Flame", value: "#FF9800" },
   { name: "Dark", value: "#1A1A2E" },
+  { name: "Mint", value: "#7FD8BE" },
+  { name: "Lilac", value: "#C9B8FF" },
+  { name: "Lemon", value: "#F5E6A8" },
+  { name: "Rose", value: "#F5B8C8" },
+  { name: "Seafoam", value: "#9FE2D6" },
+  { name: "Apricot", value: "#FFCC99" },
+  { name: "Periwinkle", value: "#B4C7F7" },
 ] as const;
 
 const DEFAULT_SHAPE_STROKE = "#E44234";
@@ -436,17 +443,23 @@ export function EmbedPdfFloatingTools({
           <EmbedPdfPaletteIcon className="h-5 w-5" accentColor={NEUTRAL_STROKE} />
         </button>
         {showColorPicker && !disabled && (
-          <div className="absolute left-full top-0 z-[60] ml-2 flex flex-col gap-2 rounded-2xl border border-sky/15 bg-white/95 p-2 shadow-lg backdrop-blur-sm">
-            {DRAW_COLORS.map((c) => (
-              <button
-                key={c.value}
-                type="button"
-                onClick={() => applyColor(c.value)}
-                className="h-7 w-7 rounded-full ring-1 ring-dark/10 transition-all hover:scale-110"
-                style={{ backgroundColor: c.value }}
-                title={c.name}
-              />
-            ))}
+          <div className="absolute left-full top-0 z-[60] ml-2 max-h-[min(22rem,70vh)] overflow-y-auto rounded-2xl border border-sky/15 bg-white/95 p-2 shadow-lg backdrop-blur-sm">
+            <p className="mb-1.5 px-0.5 font-display text-[0.55rem] font-semibold uppercase tracking-[0.18em] text-dark/40">
+              Colors
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {DRAW_COLORS.map((c) => (
+                <button
+                  key={c.value}
+                  type="button"
+                  onClick={() => applyColor(c.value)}
+                  className="h-7 w-7 rounded-full ring-1 ring-dark/10 transition-all hover:scale-110"
+                  style={{ backgroundColor: c.value }}
+                  title={c.name}
+                  aria-label={c.name}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
