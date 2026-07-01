@@ -1,29 +1,76 @@
-# Create T3 App
+# FratNotes app
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+See the [root README](../README.md) for what FratNotes is, how it works, and what's still in progress.
 
-## What's next? How do I make an app with this?
+This directory is the main Next.js application.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Prerequisites
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- Node.js 20+
+- npm
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Setup
 
-## Learn More
+```bash
+npm install
+cp .env.example .env
+npm run db:push
+npm run dev
+```
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+The dev server runs at [http://localhost:3001](http://localhost:3001).
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Environment variables
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `DATABASE_URL` | Yes | SQLite path, e.g. `file:./db.sqlite` |
+| `OPENAI_API_KEY` | For OpenAI | API key for study pass + chat (recommended) |
+| `OPENAI_MODEL` | No | Model id, default `gpt-4o-mini` |
+| `OPENAI_BASE_URL` | No | OpenRouter or other OpenAI-compatible endpoint |
+| `AI_PROVIDER` | No | Set to `ollama` to use local Ollama instead of OpenAI |
+| `OLLAMA_MODEL` | For Ollama | e.g. `llama3.1:8b` |
+| `OLLAMA_BASE_URL` | No | Defaults to `http://127.0.0.1:11434` in dev |
+| `AUTH_SECRET` | Production | NextAuth secret (`npx auth secret`) |
+| `AUTH_GOOGLE_ID` | Optional | Google OAuth client id |
+| `AUTH_GOOGLE_SECRET` | Optional | Google OAuth client secret |
+| `OPENPAPER_ENABLED` | Optional | `true` to enable Open Paper proxy |
+| `OPENPAPER_API_URL` | Optional | Open Paper API base URL |
+| `NEXT_PUBLIC_OPENPAPER_ENABLED` | Optional | `true` to show Open Paper UI panels |
 
-## How do I deploy this?
+Copy [`.env.example`](.env.example) as a starting point. The full validated schema is in [`src/env.js`](src/env.js).
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### AI providers
+
+- **OpenAI** — set `OPENAI_API_KEY`. Most reliable for the JSON study-pass output.
+- **Ollama** — set `AI_PROVIDER=ollama`, run `ollama pull llama3.1:8b`, and leave `OPENAI_API_KEY` unset.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server on port **3001** |
+| `npm run dev:clean` | Clear Next.js cache, then start dev server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run db:push` | Push Prisma schema to SQLite |
+| `npm run db:studio` | Open Prisma Studio |
+| `npm run typecheck` | Run TypeScript check |
+
+## Project structure (high level)
+
+| Path | Purpose |
+|------|---------|
+| `src/app/` | Next.js App Router pages and API routes |
+| `src/app/api/upload/` | PDF upload and text extraction |
+| `src/app/api/ai/` | Study pass and chat endpoints |
+| `src/app/notes/[id]/` | Split PDF + chat workspace |
+| `src/components/` | UI components (viewer, chatbot, navbar) |
+| `src/lib/` | AI prompts, annotation schema, PDF helpers |
+| `src/server/` | tRPC routers, auth, Open Paper proxy |
+| `prisma/` | Database schema (SQLite) |
+| `docs/OPENPAPER.md` | Optional Open Paper backend integration |
+
+## Optional: Open Paper backend
+
+For library-wide search, "Ask library" chat, and paper briefs, see [`docs/OPENPAPER.md`](docs/OPENPAPER.md). FratNotes runs fine without it.
